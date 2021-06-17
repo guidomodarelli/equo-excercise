@@ -55,7 +55,7 @@ public class AppTest {
       dron = squat.get(1);
       dron.explore(plateau);
       throw new Error("No hay colision!");
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Plateau.COLISION, err.getMessage());
     }
   }
@@ -65,7 +65,7 @@ public class AppTest {
   public void test4() {
     try {
       new Dron(0, 0, 'N', "MLRE");
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Dron.INVALID_INSTRUCTION, err.getMessage());
     }
   }
@@ -75,7 +75,7 @@ public class AppTest {
   public void test5() {
     try {
       new Dron(0, 0, 'T', "MLR");
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Dron.INVALID_ORIENTATION, err.getMessage());
     }
   }
@@ -85,7 +85,7 @@ public class AppTest {
   public void test6() {
     try {
       new Plateau(0, 1);
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Plateau.INVALID_WIDTH, err.getMessage());
     }
   }
@@ -95,7 +95,7 @@ public class AppTest {
   public void test7() {
     try {
       new Plateau(1, 0);
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Plateau.INVALID_HEIGTH, err.getMessage());
     }
   }
@@ -106,7 +106,7 @@ public class AppTest {
     try {
       ArrayList<Dron> squat = new ArrayList<Dron>() {{add(new Dron(0, 0, 'N', "MMMRM"));}};
       new Plateau(2, 1, squat);
-    } catch (Throwable err) {
+    } catch (Error err) {
       assertEquals(Plateau.LIMIT_EXCEDED, err.getMessage());
     }
   }
