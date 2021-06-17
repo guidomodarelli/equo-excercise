@@ -8,8 +8,8 @@ public class Plateau {
   private int heigth;
 
   Plateau(int width, int heigth) {
-    this.setHeigth(heigth);
     this.setWidth(width);
+    this.setHeigth(heigth);
   }
 
   public int getHeigth() {
@@ -21,35 +21,21 @@ public class Plateau {
   }
 
   public void setHeigth(int heigth) {
+    if (heigth <= 0) {
+      throw new Error("La altura de la meseta debe ser mayor a cero");
+    }
     this.heigth = heigth;
   }
 
   public void setWidth(int width) {
+    if (width <= 0) {
+      throw new Error("El ancho de la meseta debe ser mayor a cero");
+    }
     this.width = width;
   }
 
   public void addDron(Dron dron) {
     this.squad.add(dron);
-  }
-
-  public void explore(Dron dron, char[] instructions) {
-    for (char inst : instructions) {
-      switch (inst) {
-        case 'M':
-          dron.goForward();
-          break;
-        case 'L':
-          dron.turnLeft();
-          break;
-        default:
-          dron.turnRight();
-          break;
-      }
-    }
-  }
-
-  public void explore(Dron dron, String instructions) {
-    explore(dron, instructions.toCharArray());
   }
 
 }
