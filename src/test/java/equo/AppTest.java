@@ -75,6 +75,7 @@ public class AppTest {
   public void test4() {
     try {
       new Dron(0, 0, 'N', "MLRE");
+      // ~~~~~~~~~~~~~~~~~~~~~^
     } catch (Error err) {
       assertEquals(Dron.INVALID_INSTRUCTION, err.getMessage());
     }
@@ -85,6 +86,7 @@ public class AppTest {
   public void test5() {
     try {
       new Dron(0, 0, 'T', "MLR");
+      // ~~~~~~~~~~~~~^
     } catch (Error err) {
       assertEquals(Dron.INVALID_ORIENTATION, err.getMessage());
     }
@@ -95,6 +97,7 @@ public class AppTest {
   public void test6() {
     try {
       new Plateau(0, 1);
+      // ~~~~~~~~~^
     } catch (Error err) {
       assertEquals(Plateau.INVALID_WIDTH, err.getMessage());
     }
@@ -105,6 +108,7 @@ public class AppTest {
   public void test7() {
     try {
       new Plateau(1, 0);
+      // ~~~~~~~~~~~~^
     } catch (Error err) {
       assertEquals(Plateau.INVALID_HEIGTH, err.getMessage());
     }

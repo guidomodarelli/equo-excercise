@@ -24,7 +24,8 @@ public class App {
   public void resolve() throws Error {
     for (Dron dron : squat) {
       dron.explore(plateau);
-      System.out.println(dron);
+      System.out.printf("%s ", dron);
     }
+    System.out.println();
   }
 }
