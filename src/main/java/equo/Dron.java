@@ -2,6 +2,7 @@ package equo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static java.lang.Integer.parseInt;
 
 public class Dron {
   public static final String INVALID_ORIENTATION = "La orientación del dron debe contener alguno de los siguientes valores: N, W, E ó S";
@@ -21,20 +22,20 @@ public class Dron {
   }
 
   Dron(String positionString, String instructions) throws Error {
-    setPosition(positionString);
     if (instructions == null) {
       throw new Error(INSTRUCTIONS_NOT_DEFINED);
     }
+    setPosition(positionString);
     setInstructions(instructions.toCharArray());
   }
 
   public void setPosition(String positionString) throws Error {
-    Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+ (?:N|W|S|E)$");
+    Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+ [NWSE]$");
     Matcher matcher = pattern.matcher(positionString);
     if (matcher.matches()) {
       String[] valuesPosition = positionString.split(" ");
-      int x = Integer.parseInt(valuesPosition[0]);
-      int y = Integer.parseInt(valuesPosition[1]);
+      int x = parseInt(valuesPosition[0]);
+      int y = parseInt(valuesPosition[1]);
       char orientation = valuesPosition[2].charAt(0);
       this.setX(x);
       this.setY(y);

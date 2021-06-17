@@ -39,6 +39,16 @@ public class AppTest {
   }
 
   @Test
+  public void test9() {
+    Dron dron = new Dron(0, 0, 'N', "MMR");
+    Plateau plateau = new Plateau(5, 5);
+
+    dron.explore(plateau);
+
+    assertEquals("0 2 E", dron.toString());
+  }
+
+  @Test
   @DisplayName("Colision entre drones")
   public void testIntegration1() {
     ArrayList<Dron> squat = new ArrayList<Dron>() {

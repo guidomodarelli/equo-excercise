@@ -12,41 +12,46 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main {
   public static void main(String[] args) {
+    File selectedFile = selectFile();
+
+    ArrayList<String> list = readFile(selectedFile);
+    try {
+      new App(list).resolve();
+    } catch (Error e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static File selectFile() {
     JFileChooser jchooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("txt Files", "txt", "text");
     jchooser.setFileFilter(filter);
     jchooser.showOpenDialog(null);
-
+    
     File selectedFile = jchooser.getSelectedFile();
 
-    if (selectedFile != null) {
-      ArrayList<String> list = readFile(selectedFile);
-      try {
-        App a = new App(list.remove(0), list);
-        a.resolve();
-      } catch (Error e) {
-        e.printStackTrace();
-      }
-    } else {
+    if (selectedFile == null) {
       JOptionPane.showMessageDialog(null, "No selecciono ningun archivo");
       System.exit(0);
     }
+    return selectedFile;
   }
 
   public static ArrayList<String> readFile(File file) {
-    ArrayList<String> out = new ArrayList<>(); // constructs a string buffer with no characters
+    ArrayList<String> out = new ArrayList<>();
     try {
-      FileReader fr = new FileReader(file); // reads the file
+      FileReader fr = new FileReader(file);
       BufferedReader br = new BufferedReader(fr); // creates a buffering character input stream
       String line;
+
       while ((line = br.readLine()) != null) {
         out.add(line.trim());
       }
+
       fr.close(); // closes the stream and release the resources
-      return out;
     } catch (IOException e) {
       e.printStackTrace();
-      return out;
     }
+    return out;
   }
 }

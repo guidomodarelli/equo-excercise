@@ -7,8 +7,8 @@ public class App {
   private Plateau plateau;
   private ArrayList<Dron> squat;
 
-  App(String dimensions, ArrayList<String> list) throws Error {
-    this.plateau = new Plateau(dimensions);
+  App(ArrayList<String> list) throws Error {
+    this.plateau = new Plateau(list.remove(0));
     this.squat = new ArrayList<>();
 
     for (int i = 0; i < list.size(); i++) {
