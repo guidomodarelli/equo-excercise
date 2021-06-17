@@ -5,9 +5,10 @@ import java.util.regex.Pattern;
 import static java.lang.Integer.parseInt;
 
 public class Dron {
+  public static final String LIMIT_EXCEDED = "El dron está fuera de los limites de la meceta!";
   public static final String INVALID_ORIENTATION = "La orientación del dron debe contener alguno de los siguientes valores: N, W, E ó S";
   public static final String INVALID_INSTRUCTION = "Instrucción invalida";
-  public static final String INVALID_CREATE_DRON = "Error al crear el dron, los valores deben ser dos numeros enteros y una letra (N, W, S ó E) separados por espacios";
+  public static final String INVALID_POSITION = "La posición del dron está formada por dos numeros naturales y alguna de las siguientes letras N, W, S ó E separadas por espacios";
   public static final String INSTRUCTIONS_NOT_DEFINED = "Instrucciones no definidas";
   private int x;
   private int y;
@@ -15,9 +16,7 @@ public class Dron {
   private char[] instructions;
 
   Dron(int x, int y, char orientation, String instructions) {
-    this.setX(x);
-    this.setY(y);
-    this.setOrientation(orientation);
+    this.setPosition(x, y, orientation);
     this.setInstructions(instructions.toCharArray());
   }
 
@@ -29,19 +28,26 @@ public class Dron {
     setInstructions(instructions.toCharArray());
   }
 
+  public void setPosition(int x, int y, char orientation) {
+    if (x < 0 || y < 0) {
+      throw new Error(LIMIT_EXCEDED);
+    }
+    this.setX(x);
+    this.setY(y);
+    this.setOrientation(orientation);
+  }
+
   public void setPosition(String positionString) throws Error {
     Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+ [NWSE]$");
     Matcher matcher = pattern.matcher(positionString);
     if (matcher.matches()) {
-      String[] valuesPosition = positionString.split(" ");
-      int x = parseInt(valuesPosition[0]);
-      int y = parseInt(valuesPosition[1]);
-      char orientation = valuesPosition[2].charAt(0);
-      this.setX(x);
-      this.setY(y);
-      this.setOrientation(orientation);
+      String[] values = positionString.split(" ");
+      int x = parseInt(values[0]);
+      int y = parseInt(values[1]);
+      char orientation = values[2].charAt(0);
+      this.setPosition(x, y, orientation);
     } else {
-      throw new Error(INVALID_CREATE_DRON);
+      throw new Error(INVALID_POSITION);
     }
   }
 
@@ -136,7 +142,7 @@ public class Dron {
     }
   }
 
-  private void executeInstruction(char instruction, Plateau p) {
+  private void executeInstruction(char instruction) {
     switch (instruction) {
       case 'M':
         this.goForward();
@@ -150,12 +156,19 @@ public class Dron {
     }
   }
 
-  public void explore(Plateau plateau) throws Error {
+  private boolean isWithinTheLimits(int width, int heigth) throws Error {
+    if (this.x >= width || this.x < 0 || this.y >= heigth || this.y < 0) {
+      throw new Error(LIMIT_EXCEDED);
+    }
+    return true;
+  }
+
+  public void explore(int widthMax, int heigthMax) throws Error {
     for (int i = 0; i < this.instructions.length; i++) {
-      int x = getX();
-      int y = getY();
-      executeInstruction(this.instructions[i], plateau);
-      plateau.moveDron(x, y, this);
+      char instruction = this.instructions[i];
+      executeInstruction(instruction);
+      if (!isWithinTheLimits(widthMax + 1, heigthMax + 1))
+        return;
     }
   }
 
