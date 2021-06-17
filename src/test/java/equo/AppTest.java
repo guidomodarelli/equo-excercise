@@ -99,4 +99,15 @@ public class AppTest {
       assertEquals(Plateau.INVALID_HEIGTH, err.getMessage());
     }
   }
+
+  @Test
+  @DisplayName("El dron excedió el limite de la meseta")
+  public void test8() {
+    try {
+      ArrayList<Dron> squat = new ArrayList<Dron>() {{add(new Dron(0, 0, 'N', "MMMRM"));}};
+      new Plateau(2, 1, squat);
+    } catch (Throwable err) {
+      assertEquals(Plateau.LIMIT_EXCEDED, err.getMessage());
+    }
+  }
 }
