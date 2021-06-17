@@ -1,12 +1,15 @@
 package equo;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Plateau {
   public static final String COLISION = "Hay una colision entre drones!";
   public static final String LIMIT_EXCEDED = "El dron excedió los limites de la meceta!";
   public static final String INVALID_WIDTH = "El ancho de la meseta debe ser mayor a cero";
   public static final String INVALID_HEIGTH = "La altura de la meseta debe ser mayor a cero";
+  public static final String INVALID_CREATE_PLATEAU = "Error al crear la meseta, los valores deben ser dos numeros enteros separados por espacios";
   private Dron[][] Meseta;
 
   private void initialize(int width, int heigth, ArrayList<Dron> squat) {
@@ -30,6 +33,18 @@ public class Plateau {
 
   Plateau(int width, int heigth) {
     this.initialize(width, heigth, null);
+  }
+
+  Plateau(String dimensionesString) {
+    Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+$");
+    Matcher matcher = pattern.matcher(dimensionesString);
+    if (matcher.matches()) {
+      String[] dimensions = dimensionesString.split(" ");
+      int[] dimensionsInt = new int[] { Integer.parseInt(dimensions[0]), Integer.parseInt(dimensions[1]) };
+      initialize(dimensionsInt[0], dimensionsInt[1], null);
+    } else {
+      throw new Error(INVALID_CREATE_PLATEAU);
+    }
   }
 
   public int getWidth() {
