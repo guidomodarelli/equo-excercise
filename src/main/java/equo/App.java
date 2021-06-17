@@ -12,6 +12,16 @@ public class App {
   private int heigth;
   private ArrayList<Dron> squat;
 
+  /**
+   * Obtiene las coordenadas superior derecha de la meceta, y crea los drones con
+   * su respectiva posicion e instrucciones
+   * 
+   * @param list La primer posición incluye las coordenadas superior derecha de la
+   *             meceta, y el resto es información perteneciente al dron que ha
+   *             sido desplegado. A cada dron, le pertenecen dos nodos, el primero
+   *             que indica su posicion y el segundo, las instrucciones.
+   * @throws Error
+   */
   App(ArrayList<String> list) throws Error {
     getPlateauCoordinates(list.remove(0));
     this.squat = new ArrayList<>();
@@ -26,7 +36,14 @@ public class App {
     }
   }
 
-  public void getPlateauCoordinates(String dimensionesString) {
+  /**
+   * Obtiene las coordenadas superior derecha de la meceta
+   * @param dimensionesString coordenadas superior derecha de la meceta, los
+   *                          cuales son dos numero naturales separados por un
+   *                          espacio
+   * @throws Error
+   */
+  public void getPlateauCoordinates(String dimensionesString) throws Error {
     Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+$");
     Matcher matcher = pattern.matcher(dimensionesString);
     if (matcher.matches()) {
@@ -38,6 +55,11 @@ public class App {
     }
   }
 
+  /**
+   * Por cada dron, explora la meceta en busca de aceite
+   * 
+   * @throws Error
+   */
   public void resolve() throws Error {
     for (Dron dron : squat) {
       dron.explore(this.width, this.heigth);

@@ -28,7 +28,15 @@ public class Dron {
     setInstructions(instructions.toCharArray());
   }
 
-  public void setPosition(int x, int y, char orientation) {
+  /**
+   * Establece la posición del dron
+   * 
+   * @param x           Coordenada horizontal de la posición del dron en la meceta
+   * @param y           Coordenada vertical de la posición del dron en la meceta
+   * @param orientation Establece la orientación del dron [ N | W | S | E ]
+   * @throws Error verifica que el dron no tenga valores de posición negativos
+   */
+  public void setPosition(int x, int y, char orientation) throws Error {
     if (x < 0 || y < 0) {
       throw new Error(LIMIT_EXCEDED);
     }
@@ -37,6 +45,13 @@ public class Dron {
     this.setOrientation(orientation);
   }
 
+  /**
+   * Dado un string, verifica éste que cumpla con cierto formato y le intenta
+   * extraer los valores para establecer la posición del dron
+   * 
+   * @param positionString Contiene los valores de posición del dron
+   * @throws Error Formato incorrecto del string, no se puede extraer los valores
+   */
   public void setPosition(String positionString) throws Error {
     Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+ [NWSE]$");
     Matcher matcher = pattern.matcher(positionString);
@@ -75,7 +90,7 @@ public class Dron {
     this.x = y;
   }
 
-  public void setOrientation(char orientation) {
+  public void setOrientation(char orientation) throws Error {
     if (!(orientation == 'N' || orientation == 'W' || orientation == 'E' || orientation == 'S')) {
       throw new Error(INVALID_ORIENTATION);
     }
