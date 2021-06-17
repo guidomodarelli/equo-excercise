@@ -1,8 +1,13 @@
 package equo;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Dron {
   public static final String INVALID_ORIENTATION = "La orientación del dron debe contener alguno de los siguientes valores: N, W, E ó S";
   public static final String INVALID_INSTRUCTION = "Instrucción invalida";
+  public static final String INVALID_CREATE_DRON = "Error al crear el dron, los valores deben ser dos numeros enteros y una letra (N, W, S ó E) separados por espacios";
+  public static final String INSTRUCTIONS_NOT_DEFINED = "Instrucciones no definidas";
   private int x;
   private int y;
   private char orientation;
@@ -13,6 +18,30 @@ public class Dron {
     this.setY(y);
     this.setOrientation(orientation);
     this.setInstructions(instructions.toCharArray());
+  }
+
+  Dron(String positionString, String instructions) throws Error {
+    setPosition(positionString);
+    if (instructions == null) {
+      throw new Error(INSTRUCTIONS_NOT_DEFINED);
+    }
+    setInstructions(instructions.toCharArray());
+  }
+
+  public void setPosition(String positionString) throws Error {
+    Pattern pattern = Pattern.compile("^[0-9]+ [0-9]+ (?:N|W|S|E)$");
+    Matcher matcher = pattern.matcher(positionString);
+    if (matcher.matches()) {
+      String[] valuesPosition = positionString.split(" ");
+      int x = Integer.parseInt(valuesPosition[0]);
+      int y = Integer.parseInt(valuesPosition[1]);
+      char orientation = valuesPosition[2].charAt(0);
+      this.setX(x);
+      this.setY(y);
+      this.setOrientation(orientation);
+    } else {
+      throw new Error(INVALID_CREATE_DRON);
+    }
   }
 
   public int getX() {
