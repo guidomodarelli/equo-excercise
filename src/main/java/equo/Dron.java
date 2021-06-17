@@ -1,6 +1,8 @@
 package equo;
 
 public class Dron {
+  public static final String INVALID_ORIENTATION = "La orientación del dron debe contener alguno de los siguientes valores: N, W, E ó S";
+  public static final String INVALID_INSTRUCTION = "Instrucción invalida";
   private int x;
   private int y;
   private char orientation;
@@ -9,8 +11,8 @@ public class Dron {
   Dron(int x, int y, char orientation, String instructions) {
     this.setX(x);
     this.setY(y);
-    this.orientation = orientation;
-    this.instructions = instructions.toCharArray();
+    this.setOrientation(orientation);
+    this.setInstructions(instructions.toCharArray());
   }
 
   public int getX() {
@@ -38,51 +40,69 @@ public class Dron {
   }
 
   public void setOrientation(char orientation) {
+    if (!(orientation == 'N' || orientation == 'W' || orientation == 'E' || orientation == 'S')) {
+      throw new Error(INVALID_ORIENTATION);
+    }
     this.orientation = orientation;
   }
 
+  public void setInstructions(char[] instructions) throws Error {
+    for (char c : instructions) {
+      if (!(c == 'M' || c == 'L' || c == 'R')) {
+        throw new Error(INVALID_INSTRUCTION);
+      }
+    }
+    this.instructions = instructions;
+  }
+
   private void turnLeft() {
-    if (this.orientation == 'N') {
-      this.orientation = 'W';
-    } else if (this.orientation == 'W') {
-      this.orientation = 'S';
-    } else if (this.orientation == 'S') {
-      this.orientation = 'E';
-    } else {
-      this.orientation = 'N';
+    switch (this.orientation) {
+      case 'N':
+        this.orientation = 'W';
+        break;
+      case 'W':
+        this.orientation = 'S';
+        break;
+      case 'S':
+        this.orientation = 'E';
+        break;
+      default:
+        this.orientation = 'N';
+        break;
     }
   }
 
   private void turnRight() {
-    if (this.orientation == 'N') {
-      this.orientation = 'E';
-    } else if (this.orientation == 'W') {
-      this.orientation = 'N';
-    } else if (this.orientation == 'S') {
-      this.orientation = 'W';
-    } else {
-      this.orientation = 'S';
+    switch (this.orientation) {
+      case 'N':
+        this.orientation = 'E';
+        break;
+      case 'W':
+        this.orientation = 'N';
+        break;
+      case 'S':
+        this.orientation = 'W';
+        break;
+      default:
+        this.orientation = 'S';
+        break;
     }
   }
 
   private void goForward() {
-    if (this.orientation == 'N') {
-      this.setY(this.getY() + 1);
-    } else if (this.orientation == 'W') {
-      this.setX(this.getX() - 1);
-    } else if (this.orientation == 'S') {
-      this.setY(this.getY() - 1);
-    } else {
-      this.setX(this.getX() + 1);
-    }
-  }
-
-  private void checkRange(Plateau planteau) {
-    if (this.getX() < 0 || 
-        this.getY() < 0 || 
-        this.getX() > planteau.getWidth() || 
-        this.getY() > planteau.getHeigth()) {
-      throw new Error("El dron excedió los limites de la meceta");
+    switch (this.orientation) {
+      case 'N':
+        this.setY(this.getY() + 1);
+        break;
+      case 'W':
+        this.setX(this.getX() - 1);
+        break;
+      case 'S':
+        this.setY(this.getY() - 1);
+        break;
+      default:
+        this.setX(this.getX() + 1);
+        break;
     }
   }
 
@@ -90,7 +110,6 @@ public class Dron {
     switch (instruction) {
       case 'M':
         this.goForward();
-        checkRange(p);
         break;
       case 'L':
         this.turnLeft();
@@ -101,9 +120,12 @@ public class Dron {
     }
   }
 
-  public void explore(Plateau planteau) {
+  public void explore(Plateau plateau) throws Error {
     for (int i = 0; i < this.instructions.length; i++) {
-      executeInstruction(this.instructions[i], planteau);
+      int x = getX();
+      int y = getY();
+      executeInstruction(this.instructions[i], plateau);
+      plateau.moveDron(x, y, this);
     }
   }
 
